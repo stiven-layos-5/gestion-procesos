@@ -1,0 +1,31 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.6.0">
+  <diagram name="Page-1" id="thVoBxuIfprnHDNcl5F-">
+    <mxGraphModel dx="1252" dy="650" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="_njAVdnRe3CVpbSf-jo6-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;" value="" vertex="1">
+          <mxGeometry height="320" width="800" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_njAVdnRe3CVpbSf-jo6-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Gestor&amp;nbsp; de procesos y concurrencias - Terminal" vertex="1">
+          <mxGeometry height="40" width="800" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_njAVdnRe3CVpbSf-jo6-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;align=left;" value="&lt;b&gt;&amp;nbsp;[COMPONENTE 1] Simulación de Procesos&lt;/b&gt;&lt;div&gt;&lt;span style=&quot;font-family: Menlo, Monaco, Consolas, &amp;quot;Cascadia Mono&amp;quot;, &amp;quot;Ubuntu Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;JetBrains Mono&amp;quot;, &amp;quot;Fira Code&amp;quot;, Cousine, &amp;quot;Roboto Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, Courier, sans-serif, system-ui; font-size: 13px; background-color: transparent;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(145, 208, 118), rgb(255, 255, 255));&quot;&gt;----------------------------------------&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="30" width="785" x="45" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="_njAVdnRe3CVpbSf-jo6-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;align=left;" value="&lt;b&gt;Proceso simulado creado: ID=1, Nombre=Proceso A, Duracion=5s&lt;/b&gt;" vertex="1">
+          <mxGeometry height="30" width="785" x="45" y="189" as="geometry" />
+        </mxCell>
+        <mxCell id="_njAVdnRe3CVpbSf-jo6-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;align=left;" value="&lt;b&gt;Proceso simulado creado: ID=2, Nombre=Proceso B, Duracion=3s&lt;/b&gt;" vertex="1">
+          <mxGeometry height="30" width="785" x="45" y="219" as="geometry" />
+        </mxCell>
+        <mxCell id="_njAVdnRe3CVpbSf-jo6-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;fontColor=default;strokeColor=none;" value="&lt;div&gt;&lt;div style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;&quot;&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;========================================&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;&quot;&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;   GESTOR DE PROCESOS Y CONCURRENCIA&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;div style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;&quot;&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;========================================&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="785" x="47.5" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="_njAVdnRe3CVpbSf-jo6-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;align=left;" value="&lt;b&gt;Proceso simulado creado: ID=3, Nombre=Proceso C, Duracion=7s&lt;/b&gt;" vertex="1">
+          <mxGeometry height="30" width="785" x="47.5" y="249" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
