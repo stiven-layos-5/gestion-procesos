@@ -1,6 +1,6 @@
 # Gestor de Procesos y Concurrencia
 
-El proyecto es un gestor de proceso y concurrencias que simulará procesos, utilizara concurrencia real con goroutines, implementara sincronización, implementara sincronización y demostrara interacción con el SO real
+El proyecto es un gestor de proceso y concurrencias que simulará procesos, utilizara concurrencia real con goroutines, implementara sincronización y demostrara interacción con el SO real
 
 
 ## Requisitos
