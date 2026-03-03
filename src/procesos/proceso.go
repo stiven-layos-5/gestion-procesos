@@ -30,7 +30,9 @@ func NuevoSimuladorProcesos() *SimuladorProcesos {
 }
 
 func (s *SimuladorProcesos) CrearProcesoSimulado(nombre string, duracion int) {
+
 	s.mutex.Lock()
+
 	defer s.mutex.Unlock()
 
 	s.contadorID++
@@ -42,8 +44,7 @@ func (s *SimuladorProcesos) CrearProcesoSimulado(nombre string, duracion int) {
 	}
 
 	s.Procesos = append(s.Procesos, proceso)
-	fmt.Printf("Proceso simulado creado: ID=%d, Nombre=%s, Duración=%ds\n",
-		proceso.ID, proceso.Nombre, proceso.Duracion)
+	fmt.Printf("Proceso simulado creado: ID=%d, Nombre=%s, Duración=%ds\n", proceso.ID, proceso.Nombre, proceso.Duracion)
 }
 
 func (s *SimuladorProcesos) EjecutarSimulacion() {
@@ -84,9 +85,9 @@ func (s *SimuladorProcesos) ejecutarProcesoSimulado(p *ProcesoSimulado, wg *sync
 	fmt.Printf("Proceso %d (%s) está EJECUTANDO (duración: %ds)\n", p.ID, p.Nombre, p.Duracion)
 
 	for i := 0; i < p.Duracion; i++ {
+
 		time.Sleep(1 * time.Second)
-		fmt.Printf("Proceso %d (%s) ejecutándose... %d/%d\n",
-			p.ID, p.Nombre, i+1, p.Duracion)
+		fmt.Printf("Proceso %d (%s) ejecutándose... %d/%d\n", p.ID, p.Nombre, i+1, p.Duracion)
 
 		if i == p.Duracion/2 {
 			p.mutex.Lock()
