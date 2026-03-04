@@ -12,6 +12,12 @@ type Proceso struct {
 	Completado     bool
 }
 
+type Metricas struct {
+	ID            string
+	TiempoEspera  int
+	TiempoRetorno int
+}
+
 type ResultadoEjecucion struct {
 	ProcesoID string
 	Inicio    int
@@ -29,7 +35,7 @@ func NuevoProceso(id string, burst, arrival int) Proceso {
 	}
 }
 
-func EjecutarRoundRobin(procesos []Proceso, quantum int) ([]ResultadoEjecucion, []Proceso) {
+func EjecutarRoundRobin(procesos []Proceso, quantum int) []Proceso {
 
 	historial := []ResultadoEjecucion{}
 	tiempoActual := 0
@@ -97,7 +103,32 @@ func EjecutarRoundRobin(procesos []Proceso, quantum int) ([]ResultadoEjecucion, 
 		}
 	}
 
-	return historial, procesos
+	return procesos
+}
+
+func CalcularMetricas(procesos []Proceso) ([]Metricas, float64, float64) {
+
+	metricas := make([]Metricas, len(procesos))
+	totalEspera := 0
+	totalRetorno := 0
+
+	for i, p := range procesos {
+		espera := p.TiempoFin - p.TiempoLlegada - p.TiempoTotal
+		retorno := p.TiempoFin - p.TiempoLlegada
+		totalEspera += espera
+		totalRetorno += retorno
+		metricas[i] = Metricas{
+			ID:            p.ID,
+			TiempoEspera:  espera,
+			TiempoRetorno: retorno,
+		}
+	}
+
+	n := len(procesos)
+	promedioEspera := float64(totalEspera) / float64(n)
+	promedioRetorno := float64(totalRetorno) / float64(n)
+
+	return metricas, promedioEspera, promedioRetorno
 }
 
 func ImprimirProcesos(procesos []Proceso) {
