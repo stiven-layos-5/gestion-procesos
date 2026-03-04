@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"gestion-procesos/src/proceso"
+	proceso "gestion-procesos/src/procesos"
 	"math/rand"
 	"time"
 )
@@ -21,8 +21,7 @@ func main() {
 
 	fmt.Println("[COMPONENTE 1] Simulación de Procesos")
 	fmt.Println("----------------------------------------")
-	
-	
+
 	for i := 0; i < 3; i++ {
 
 		min := 1
@@ -31,12 +30,12 @@ func main() {
 		duracion := rand.Intn(max-min+1) + min
 		nombre := fmt.Sprintf("Proceso %d", i)
 
-		procesos = append(procesos, proceso.NewProcess(nombre, duracion, i))
+		procesos = append(procesos, proceso.NuevoProceso(nombre, duracion, i))
 	}
 
-	history, completed := proceso.EjecutarRoundRobin(procesos, quantum)
+	proceso.ImprimirProcesos(procesos)
 
-	proceso.PrintProcesses(processes)
+	proceso.EjecutarRoundRobin(procesos, quantum)
 
 	fmt.Println()
 }

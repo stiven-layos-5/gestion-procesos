@@ -20,12 +20,12 @@ type ResultadoEjecucion struct {
 
 func NuevoProceso(id string, burst, arrival int) Proceso {
 
-	return Proceso {
-		ID: id,
-		TiempoTotal: burst,
+	return Proceso{
+		ID:             id,
+		TiempoTotal:    burst,
 		TiempoRestante: burst,
-		TiempoLlegada: arrival,
-		TiempoInicio: -1,
+		TiempoLlegada:  arrival,
+		TiempoInicio:   -1,
 	}
 }
 
@@ -44,7 +44,7 @@ func EjecutarRoundRobin(procesos []Proceso, quantum int) ([]ResultadoEjecucion, 
 	}
 
 	for completados < n {
-		
+
 		if len(cola) == 0 {
 			tiempoActual++
 			for i := range procesos {
@@ -104,7 +104,7 @@ func ImprimirProcesos(procesos []Proceso) {
 	fmt.Println("\n  Procesos cargados:")
 	fmt.Println("  ──────────────────────────────────────")
 	for _, p := range procesos {
-		fmt.Printf("  • %-4s  Ráfaga: %3d ms  |  Llegada: t=%d\n",
+		fmt.Printf(" > %-4s  Burst: %3d ms  |  Arrival: t=%d\n",
 			p.ID, p.TiempoTotal, p.TiempoLlegada)
 	}
 }
