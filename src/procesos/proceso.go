@@ -1,120 +1,119 @@
-package procesos
+package proceso
 
-import (
-	"fmt"
-	"sync"
-	"time"
-)
+import "fmt"
 
-type ProcesoSimulado struct {
-	ID           int
-	Nombre       string
-	Duracion     int
-	Estado       string
-	TiempoInicio time.Time
-	TiempoFin    time.Time
-	mutex        sync.Mutex
+type Proceso struct {
+	ID             string
+	TiempoTotal    int
+	TiempoRestante int
+	TiempoLlegada  int
+	TiempoInicio   int
+	TiempoFin      int
+	Completado     bool
 }
 
-type SimuladorProcesos struct {
-	Procesos   []*ProcesoSimulado
-	contadorID int
-	mutex      sync.Mutex
+type ResultadoEjecucion struct {
+	ProcesoID string
+	Inicio    int
+	Fin       int
 }
 
-func NuevoSimuladorProcesos() *SimuladorProcesos {
-	return &SimuladorProcesos{
-		Procesos:   make([]*ProcesoSimulado, 0),
-		contadorID: 0,
+func NuevoProceso(id string, burst, arrival int) Proceso {
+
+	return Proceso {
+		ID: id,
+		TiempoTotal: burst,
+		TiempoRestante: burst,
+		TiempoLlegada: arrival,
+		TiempoInicio: -1,
 	}
 }
 
-func (s *SimuladorProcesos) CrearProcesoSimulado(nombre string, duracion int) {
+func EjecutarRoundRobin(procesos []Proceso, quantum int) ([]ResultadoEjecucion, []Proceso) {
 
-	s.mutex.Lock()
+	historial := []ResultadoEjecucion{}
+	tiempoActual := 0
+	completados := 0
+	n := len(procesos)
+	cola := []int{}
 
-	defer s.mutex.Unlock()
-
-	s.contadorID++
-	proceso := &ProcesoSimulado{
-		ID:       s.contadorID,
-		Nombre:   nombre,
-		Duracion: duracion,
-		Estado:   "Nuevo",
-	}
-
-	s.Procesos = append(s.Procesos, proceso)
-	fmt.Printf("Proceso simulado creado: ID=%d, Nombre=%s, Duración=%ds\n", proceso.ID, proceso.Nombre, proceso.Duracion)
-}
-
-func (s *SimuladorProcesos) EjecutarSimulacion() {
-	if len(s.Procesos) == 0 {
-		fmt.Println("No hay procesos para simular")
-		return
-	}
-
-	fmt.Println("\n--- SIMULACIÓN DE PROCESOS ---")
-
-	var wg sync.WaitGroup
-
-	for _, proceso := range s.Procesos {
-		wg.Add(1)
-		go s.ejecutarProcesoSimulado(proceso, &wg)
-	}
-
-	wg.Wait()
-	fmt.Println("--- SIMULACIÓN COMPLETADA ---")
-}
-
-func (s *SimuladorProcesos) ejecutarProcesoSimulado(p *ProcesoSimulado, wg *sync.WaitGroup) {
-
-	defer wg.Done()
-
-	p.mutex.Lock()
-	p.Estado = "Listo"
-	p.mutex.Unlock()
-
-	fmt.Printf("Proceso %d (%s) está LISTO\n", p.ID, p.Nombre)
-	time.Sleep(500 * time.Millisecond)
-
-	p.mutex.Lock()
-	p.Estado = "Ejecutando"
-	p.TiempoInicio = time.Now()
-	p.mutex.Unlock()
-
-	fmt.Printf("Proceso %d (%s) está EJECUTANDO (duración: %ds)\n", p.ID, p.Nombre, p.Duracion)
-
-	for i := 0; i < p.Duracion; i++ {
-
-		time.Sleep(1 * time.Second)
-		fmt.Printf("Proceso %d (%s) ejecutándose... %d/%d\n", p.ID, p.Nombre, i+1, p.Duracion)
-
-		if i == p.Duracion/2 {
-			p.mutex.Lock()
-			p.Estado = "Bloqueado"
-			p.mutex.Unlock()
-
-			fmt.Printf("Proceso %d (%s) se ha BLOQUEADO\n", p.ID, p.Nombre)
-			time.Sleep(1 * time.Second)
-
-			p.mutex.Lock()
-			p.Estado = "Listo"
-			p.mutex.Unlock()
-
-			fmt.Printf("Proceso %d (%s) vuelve a ESTAR LISTO\n", p.ID, p.Nombre)
-			time.Sleep(500 * time.Millisecond)
-
-			p.mutex.Lock()
-			p.Estado = "Ejecutando"
-			p.mutex.Unlock()
+	for i := range procesos {
+		if procesos[i].TiempoLlegada <= tiempoActual {
+			cola = append(cola, i)
 		}
 	}
 
-	p.mutex.Lock()
-	p.Estado = "Terminado"
-	p.TiempoFin = time.Now()
-	duracionReal := p.TiempoFin.Sub(p.TiempoInicio)
-	p.mutex.Unlock()
+	for completados < n {
+		
+		if len(cola) == 0 {
+			tiempoActual++
+			for i := range procesos {
+				if !procesos[i].Completado && procesos[i].TiempoLlegada == tiempoActual {
+					cola = append(cola, i)
+				}
+			}
+			continue
+		}
 
-	fmt.Printf("Proceso %d (%s) TERMINADO (duración real: %v)\n", p.ID, p.Nombre, duracionReal)
+		idx := cola[0]
+		cola = cola[1:]
+		p := &procesos[idx]
+
+		if p.TiempoInicio == -1 {
+			p.TiempoInicio = tiempoActual
+		}
+
+		ejecutar := quantum
+		if p.TiempoRestante < quantum {
+			ejecutar = p.TiempoRestante
+		}
+
+		inicio := tiempoActual
+		tiempoActual += ejecutar
+		p.TiempoRestante -= ejecutar
+
+		historial = append(historial, ResultadoEjecucion{
+			ProcesoID: p.ID,
+			Inicio:    inicio,
+			Fin:       tiempoActual,
+		})
+
+		for i := range procesos {
+			if !procesos[i].Completado && i != idx &&
+				procesos[i].TiempoLlegada > inicio &&
+				procesos[i].TiempoLlegada <= tiempoActual {
+				if !estaEnCola(cola, i) {
+					cola = append(cola, i)
+				}
+			}
+		}
+
+		if p.TiempoRestante == 0 {
+			p.Completado = true
+			p.TiempoFin = tiempoActual
+			completados++
+		} else {
+			cola = append(cola, idx)
+		}
+	}
+
+	return historial, procesos
+}
+
+func ImprimirProcesos(procesos []Proceso) {
+	fmt.Println("\n  Procesos cargados:")
+	fmt.Println("  ──────────────────────────────────────")
+	for _, p := range procesos {
+		fmt.Printf("  • %-4s  Ráfaga: %3d ms  |  Llegada: t=%d\n",
+			p.ID, p.TiempoTotal, p.TiempoLlegada)
+	}
+}
+
+func estaEnCola(cola []int, idx int) bool {
+	for _, c := range cola {
+		if c == idx {
+			return true
+		}
+	}
+	return false
 }

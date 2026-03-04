@@ -2,12 +2,18 @@ package main
 
 import (
 	"fmt"
-	"gestion-procesos/src/procesos"
+	"gestion-procesos/src/proceso"
 	"math/rand"
 	"time"
 )
 
 func main() {
+
+	const quantum = 3
+
+	procesos := []proceso.Proceso{}
+
+	rand.Seed(time.Now().UnixNano())
 
 	fmt.Println("========================================")
 	fmt.Println("  GESTOR DE PROCESOS Y CONCURRENCIA")
@@ -15,10 +21,8 @@ func main() {
 
 	fmt.Println("[COMPONENTE 1] Simulación de Procesos")
 	fmt.Println("----------------------------------------")
-	simulador := procesos.NuevoSimuladorProcesos()
-
-	rand.Seed(time.Now().UnixNano())
-
+	
+	
 	for i := 0; i < 3; i++ {
 
 		min := 1
@@ -27,14 +31,12 @@ func main() {
 		duracion := rand.Intn(max-min+1) + min
 		nombre := fmt.Sprintf("Proceso %d", i)
 
-		simulador.CrearProcesoSimulado(nombre, duracion)
-
+		procesos = append(procesos, proceso.NewProcess(nombre, duracion, i))
 	}
 
-	//simulador.CrearProcesoSimulado("Proceso A", 5)
-	//simulador.CrearProcesoSimulado("Proceso B", 3)
-	//simulador.CrearProcesoSimulado("Proceso C", 7)
+	history, completed := proceso.EjecutarRoundRobin(procesos, quantum)
 
-	simulador.EjecutarSimulacion()
+	proceso.PrintProcesses(processes)
+
 	fmt.Println()
 }
