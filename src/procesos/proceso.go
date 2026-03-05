@@ -140,6 +140,29 @@ func ImprimirProcesos(procesos []Proceso) {
 	}
 }
 
+func ImprimirMetricas(procesos []Proceso) {
+
+	fmt.Println("\n=== MÉTRICAS ===")
+	fmt.Printf("%-5s %-10s %-10s %-12s %-10s %-10s %-10s %-10s\n", "PID", "Arrival", "Burst", "First Run", "Finish", "T", "W", "R")
+
+	totalEspera, totalRetorno := 0, 0
+	for _, p := range procesos {
+
+		espera := p.TiempoFin - p.TiempoLlegada - p.TiempoTotal
+		retorno := p.TiempoFin - p.TiempoLlegada
+		total := p.TiempoInicio - p.TiempoLlegada
+		totalEspera += espera
+		totalRetorno += retorno
+
+		fmt.Printf("%-5s %-10d %-10d %-12d %-10d %-10d %-10d %-10d\n", p.ID, p.TiempoLlegada, p.TiempoTotal, p.TiempoInicio, p.TiempoFin, retorno, espera, total)
+	}
+
+	n := len(procesos)
+	fmt.Printf("\nTiempo promedio de espera:  %.2f ms\n", float64(totalEspera)/float64(n))
+	fmt.Printf("Tiempo promedio de retorno: %.2f ms\n", float64(totalRetorno)/float64(n))
+
+}
+
 func estaEnCola(cola []int, idx int) bool {
 	for _, c := range cola {
 		if c == idx {
