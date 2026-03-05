@@ -7,7 +7,7 @@ El proyecto es un gestor de proceso y concurrencias que simulará procesos, util
 ## Qué funciona (E1)
 - Se crea 3 proceso con burst aleatorios
 - Muestra en consola los procesos creados con su información.
-- Crea metricas pero aun no son visibles en consola.
+- Crea metricas y las muestra en consola.
 
 ## Estructura
 - src/procesos/proceso.go
