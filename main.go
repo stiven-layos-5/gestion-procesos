@@ -57,8 +57,8 @@ func main() {
 		rafagaMin := 1
 		rafagaMax := 11
 
-		memoryMin := 8
-		memoryMax := 20
+		memoryMin := 1
+		memoryMax := 5
 
 		duracion := rand.Intn(rafagaMax-rafagaMin+1) + rafagaMin
 		tamañoMemoria := rand.Intn(memoryMax-memoryMin+1) + memoryMin
@@ -68,7 +68,7 @@ func main() {
 			Llegada:    i,
 			Rafaga:     duracion,
 			Restante:   duracion,
-			TamMemoria: tamañoMemoria,
+			TamMemoria: tamañoMemoria * 4096,
 		}
 
 		sched.AddProcess(proc)
