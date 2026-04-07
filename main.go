@@ -19,7 +19,7 @@ func main() {
 
 	defer log.Close()
 
-	const quantum = 3
+	const quantum = 2
 
 	sched := scheduler.NewScheduler(quantum, 16, log)
 
@@ -64,7 +64,7 @@ func main() {
 	// 	tamañoMemoria := rand.Intn(memoryMax-memoryMin+1) + memoryMin
 
 	// 	proc := &proceso.Proceso{
-	// 		PID:        i,
+	// 		PID:        i + 1,
 	// 		Llegada:    i,
 	// 		Rafaga:     duracion,
 	// 		Restante:   duracion,
