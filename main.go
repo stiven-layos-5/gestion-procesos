@@ -20,7 +20,7 @@ func main() {
 	defer log.Close()
 
 	const quantum = 2
-	const totalPaginas = 16
+	const totalPaginas = 4
 
 	sched := scheduler.NewScheduler(quantum, totalPaginas, log)
 
