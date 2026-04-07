@@ -29,13 +29,16 @@ func main() {
 	fmt.Println("  GESTOR DE PROCESOS Y CONCURRENCIA")
 	fmt.Println("========================================")
 
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 10; i++ {
 
-		min := 1
-		max := 11
+		rafagaMin := 1
+		rafagaMax := 11
 
-		duracion := rand.Intn(max-min+1) + min
-		tamañoMemoria := rand.Intn(max-min+1) + min
+		memoryMin := 8
+		memoryMax := 20
+
+		duracion := rand.Intn(rafagaMax-rafagaMin+1) + rafagaMin
+		tamañoMemoria := rand.Intn(memoryMax-memoryMin+1) + memoryMin
 
 		proc := &proceso.Proceso{
 			PID:        i,
