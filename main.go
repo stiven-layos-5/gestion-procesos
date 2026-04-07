@@ -29,27 +29,50 @@ func main() {
 	fmt.Println("  GESTOR DE PROCESOS Y CONCURRENCIA")
 	fmt.Println("========================================")
 
-	for i := 0; i < 10; i++ {
+	procs := []struct {
+		pid     int
+		llegada int
+		rafaga  int
+		tamMem  int
+	}{
+		{1, 0, 5, 8},  // 8 KB → 2 páginas
+		{2, 1, 3, 12}, // 12 KB → 3 páginas
+		{3, 2, 8, 4},  // 4 KB → 1 página
+		{4, 3, 6, 20}, // 20 KB → 5 páginas (no cabe junto con los otros, se swapea)
+	}
 
-		rafagaMin := 1
-		rafagaMax := 11
-
-		memoryMin := 8
-		memoryMax := 20
-
-		duracion := rand.Intn(rafagaMax-rafagaMin+1) + rafagaMin
-		tamañoMemoria := rand.Intn(memoryMax-memoryMin+1) + memoryMin
-
+	for _, p := range procs {
 		proc := &proceso.Proceso{
-			PID:        i,
-			Llegada:    i,
-			Rafaga:     duracion,
-			Restante:   duracion,
-			TamMemoria: tamañoMemoria,
+			PID:        p.pid,
+			Llegada:    p.llegada,
+			Rafaga:     p.rafaga,
+			Restante:   p.rafaga,
+			TamMemoria: p.tamMem,
 		}
-
 		sched.AddProcess(proc)
 	}
+
+	// for i := 0; i < 10; i++ {
+
+	// 	rafagaMin := 1
+	// 	rafagaMax := 11
+
+	// 	memoryMin := 8
+	// 	memoryMax := 20
+
+	// 	duracion := rand.Intn(rafagaMax-rafagaMin+1) + rafagaMin
+	// 	tamañoMemoria := rand.Intn(memoryMax-memoryMin+1) + memoryMin
+
+	// 	proc := &proceso.Proceso{
+	// 		PID:        i,
+	// 		Llegada:    i,
+	// 		Rafaga:     duracion,
+	// 		Restante:   duracion,
+	// 		TamMemoria: tamañoMemoria,
+	// 	}
+
+	// 	sched.AddProcess(proc)
+	// }
 
 	fmt.Println("=== SIMULADOR CONCURRENTE ROUND ROBIN CON MEMORIA ===")
 	fmt.Println("Revisar simulacion.log para eventos detallados.\n")
