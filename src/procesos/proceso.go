@@ -1,173 +1,22 @@
 package proceso
 
-import "fmt"
-
 type Proceso struct {
-	ID             string
-	TiempoTotal    int
-	TiempoRestante int
-	TiempoLlegada  int
-	TiempoInicio   int
-	TiempoFin      int
-	Completado     bool
+	PID           int
+	Llegada       int
+	Rafaga        int
+	Restante      int
+	Espera        int
+	Retorno       int
+	Completado    bool
+	PrimeraEjec   bool
+	InicioPrimero int
 }
 
-type Metricas struct {
-	ID            string
-	TiempoEspera  int
-	TiempoRetorno int
-}
-
-type ResultadoEjecucion struct {
-	ProcesoID string
-	Inicio    int
-	Fin       int
-}
-
-func NuevoProceso(id string, burst, arrival int) Proceso {
+func NuevoProceso(id int, arrival int, burst int) Proceso {
 
 	return Proceso{
-		ID:             id,
-		TiempoTotal:    burst,
-		TiempoRestante: burst,
-		TiempoLlegada:  arrival,
-		TiempoInicio:   -1,
+		PID:     id,
+		Llegada: arrival,
+		Rafaga:  burst,
 	}
-}
-
-func EjecutarRoundRobin(procesos []Proceso, quantum int) []Proceso {
-
-	historial := []ResultadoEjecucion{}
-	tiempoActual := 0
-	completados := 0
-	n := len(procesos)
-	cola := []int{}
-
-	for i := range procesos {
-		if procesos[i].TiempoLlegada <= tiempoActual {
-			cola = append(cola, i)
-		}
-	}
-
-	for completados < n {
-
-		if len(cola) == 0 {
-			tiempoActual++
-			for i := range procesos {
-				if !procesos[i].Completado && procesos[i].TiempoLlegada == tiempoActual {
-					cola = append(cola, i)
-				}
-			}
-			continue
-		}
-
-		idx := cola[0]
-		cola = cola[1:]
-		p := &procesos[idx]
-
-		if p.TiempoInicio == -1 {
-			p.TiempoInicio = tiempoActual
-		}
-
-		ejecutar := quantum
-		if p.TiempoRestante < quantum {
-			ejecutar = p.TiempoRestante
-		}
-
-		inicio := tiempoActual
-		tiempoActual += ejecutar
-		p.TiempoRestante -= ejecutar
-
-		historial = append(historial, ResultadoEjecucion{
-			ProcesoID: p.ID,
-			Inicio:    inicio,
-			Fin:       tiempoActual,
-		})
-
-		for i := range procesos {
-			if !procesos[i].Completado && i != idx &&
-				procesos[i].TiempoLlegada > inicio &&
-				procesos[i].TiempoLlegada <= tiempoActual {
-				if !estaEnCola(cola, i) {
-					cola = append(cola, i)
-				}
-			}
-		}
-
-		if p.TiempoRestante == 0 {
-			p.Completado = true
-			p.TiempoFin = tiempoActual
-			completados++
-		} else {
-			cola = append(cola, idx)
-		}
-	}
-
-	return procesos
-}
-
-func CalcularMetricas(procesos []Proceso) ([]Metricas, float64, float64) {
-
-	metricas := make([]Metricas, len(procesos))
-	totalEspera := 0
-	totalRetorno := 0
-
-	for i, p := range procesos {
-		espera := p.TiempoFin - p.TiempoLlegada - p.TiempoTotal
-		retorno := p.TiempoFin - p.TiempoLlegada
-		totalEspera += espera
-		totalRetorno += retorno
-		metricas[i] = Metricas{
-			ID:            p.ID,
-			TiempoEspera:  espera,
-			TiempoRetorno: retorno,
-		}
-	}
-
-	n := len(procesos)
-	promedioEspera := float64(totalEspera) / float64(n)
-	promedioRetorno := float64(totalRetorno) / float64(n)
-
-	return metricas, promedioEspera, promedioRetorno
-}
-
-func ImprimirProcesos(procesos []Proceso) {
-	fmt.Println("\n  Procesos cargados:")
-	fmt.Println("  ──────────────────────────────────────")
-	for _, p := range procesos {
-		fmt.Printf(" > %-4s  Burst: %3d ms  |  Arrival: t=%d\n",
-			p.ID, p.TiempoTotal, p.TiempoLlegada)
-	}
-}
-
-func ImprimirMetricas(procesos []Proceso) {
-
-	fmt.Println("\n=== MÉTRICAS ===")
-	fmt.Printf("%-5s %-10s %-10s %-12s %-10s %-10s %-10s %-10s\n", "PID", "Arrival", "Burst", "First Run", "Finish", "T", "W", "R")
-
-	totalEspera, totalRetorno := 0, 0
-	for _, p := range procesos {
-
-		espera := p.TiempoFin - p.TiempoLlegada - p.TiempoTotal
-		retorno := p.TiempoFin - p.TiempoLlegada
-		total := p.TiempoInicio - p.TiempoLlegada
-		totalEspera += espera
-		totalRetorno += retorno
-
-		fmt.Printf("%-5s %-10d %-10d %-12d %-10d %-10d %-10d %-10d\n", p.ID, p.TiempoLlegada, p.TiempoTotal, p.TiempoInicio, p.TiempoFin, retorno, espera, total)
-	}
-
-	n := len(procesos)
-	fmt.Printf("\nTiempo promedio de espera:  %.2f ms\n", float64(totalEspera)/float64(n))
-	fmt.Printf("Tiempo promedio de retorno: %.2f ms\n", float64(totalRetorno)/float64(n))
-
-}
-
-func estaEnCola(cola []int, idx int) bool {
-	for _, c := range cola {
-		if c == idx {
-			return true
-		}
-	}
-	return false
 }
