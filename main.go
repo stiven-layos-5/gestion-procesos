@@ -20,8 +20,9 @@ func main() {
 	defer log.Close()
 
 	const quantum = 2
+	const totalPaginas = 16
 
-	sched := scheduler.NewScheduler(quantum, 16, log)
+	sched := scheduler.NewScheduler(quantum, totalPaginas, log)
 
 	rand.Seed(time.Now().UnixNano())
 

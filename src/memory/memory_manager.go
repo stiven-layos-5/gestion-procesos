@@ -3,9 +3,10 @@ package memory
 import "sync"
 
 type MemoryManager struct {
-	totalPaginas  int
-	paginasLibres []bool
-	mutex         sync.Mutex
+	totalPaginas     int
+	paginasLibres    []bool
+	mutex            sync.Mutex
+	requiereContiguo bool
 }
 
 func NewMemoryManager(totalPaginas int) *MemoryManager {
