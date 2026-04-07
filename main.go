@@ -35,10 +35,10 @@ func main() {
 		rafaga  int
 		tamMem  int
 	}{
-		{1, 0, 5, 8},  // 8 KB → 2 páginas
-		{2, 1, 3, 12}, // 12 KB → 3 páginas
-		{3, 2, 8, 4},  // 4 KB → 1 página
-		{4, 3, 6, 20}, // 20 KB → 5 páginas (no cabe junto con los otros, se swapea)
+		{1, 0, 5, 8},
+		{2, 1, 3, 12},
+		{3, 2, 8, 4},
+		{4, 3, 6, 20},
 	}
 
 	for _, p := range procs {

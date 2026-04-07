@@ -15,7 +15,7 @@ func NewMemoryManager(totalPaginas int) *MemoryManager {
 	}
 }
 
-// Asignar páginas a un proceso (modelo de asignación simple: primeras libres)
+// Asignar páginas a un proceso
 // Retorna slice de índices o nil si no hay suficientes páginas libres
 func (mm *MemoryManager) AsignarPaginas(numPaginas int) []int {
 	mm.mutex.Lock()
