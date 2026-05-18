@@ -4,25 +4,25 @@ import (
 	"fmt"
 	"time"
 
-	"gestion-procesos/src/internal/concurrency"
-	"gestion-procesos/src/internal/monitor"
-	"gestion-procesos/src/internal/process"
-	"gestion-procesos/src/internal/scheduler"
-	sincronizacion "gestion-procesos/src/internal/sync"
+	"gestion-procesos/src/services/concurrency"
+	"gestion-procesos/src/services/monitor"
+	"gestion-procesos/src/services/process"
+	"gestion-procesos/src/services/scheduler"
+	sincronizacion "gestion-procesos/src/services/sync"
 	"gestion-procesos/src/models"
 )
 
 func separador(titulo string) {
 	fmt.Println()
-	fmt.Println("╔══════════════════════════════════════════════════════════════╗")
+	fmt.Println("╔════════════════════════════════════════════════════════════════╗")
 	fmt.Printf( "║  %-62s║\n", titulo)
-	fmt.Println("╚══════════════════════════════════════════════════════════════╝")
+	fmt.Println("╚════════════════════════════════════════════════════════════════╝")
 }
 
 func main() {
 	fmt.Println("╔══════════════════════════════════════════════════════════════╗")
-	fmt.Println("║        GESTOR DE PROCESOS Y CONCURRENCIA — Entrega 3        ║")
-	fmt.Println("║              Modalidad 1: Proyecto Base (Go)                ║")
+	fmt.Println("║        GESTOR DE PROCESOS Y CONCURRENCIA                     ║")
+	fmt.Println("║              Modalidad 1: Proyecto Base (Go)                 ║")
 	fmt.Println("╚══════════════════════════════════════════════════════════════╝")
 
 	// ═══════════════════════════════════════════════════════
@@ -30,7 +30,7 @@ func main() {
 	// ═══════════════════════════════════════════════════════
 	separador("MÓDULO 1 — Simulación académica de planificación de CPU")
 
-	fmt.Println("\n▶ Algoritmo: Round-Robin (quantum = 3)")
+	fmt.Println("\n -> Algoritmo: Round-Robin (quantum = 3)")
 	planRR := scheduler.NuevoPlanificador(scheduler.RoundRobin, 3)
 	procesosRR := []*models.ProcesoSimulado{
 		{ID: 1, Nombre: "Editor",    BurstTime: 8},
@@ -43,7 +43,7 @@ func main() {
 	}
 	planRR.Ejecutar()
 
-	fmt.Println("\n▶ Algoritmo: Prioridad (menor número = mayor prioridad)")
+	fmt.Println("\n -> Algoritmo: Prioridad (menor número = mayor prioridad)")
 	planPrio := scheduler.NuevoPlanificador(scheduler.Prioridad, 0)
 	procesosPrio := []*models.ProcesoSimulado{
 		{ID: 1, Nombre: "Kernel",    BurstTime: 6, Prioridad: 1},
@@ -63,7 +63,7 @@ func main() {
 
 	mgr := process.NuevoManager()
 
-	fmt.Println("\n▶ Listando procesos reales del sistema operativo...")
+	fmt.Println("\n -> Listando procesos reales del sistema operativo...")
 	procesos, err := mgr.Listar()
 	if err != nil {
 		fmt.Printf("  Error al listar: %v\n", err)
@@ -71,7 +71,7 @@ func main() {
 		process.ImprimirProcesos(procesos)
 	}
 
-	fmt.Println("\n▶ Iniciando proceso real: 'sleep 2'")
+	fmt.Println("\n -> Iniciando proceso real: 'sleep 2'")
 	pid, err := mgr.Iniciar("sleep", "2")
 	if err != nil {
 		fmt.Printf("  Error: %v\n", err)
@@ -79,7 +79,7 @@ func main() {
 		fmt.Printf("  Proceso 'sleep 2' corriendo con PID: %d\n", pid)
 		time.Sleep(500 * time.Millisecond)
 
-		fmt.Printf("\n▶ Finalizando proceso PID %d...\n", pid)
+		fmt.Printf("\n -> Finalizando proceso PID %d...\n", pid)
 		if err := mgr.Finalizar(pid); err != nil {
 			fmt.Printf("  Error al finalizar: %v\n", err)
 		}
@@ -90,7 +90,7 @@ func main() {
 	// ═══════════════════════════════════════════════════════
 	separador("MÓDULO 3 — Concurrencia real con Worker Pool (goroutines)")
 
-	fmt.Println("\n▶ Creando Worker Pool con 3 workers y 10 tareas...")
+	fmt.Println("\n -> Creando Worker Pool con 3 workers y 10 tareas...")
 	pool := concurrency.NuevoWorkerPool(3)
 	tareas := concurrency.GenerarTareas(10)
 	pool.Iniciar()
@@ -105,14 +105,14 @@ func main() {
 	// ═══════════════════════════════════════════════════════
 	separador("MÓDULO 4 — Sincronización: race condition y mecanismos de control")
 
-	fmt.Println("\n▶ PASO 1: Condición de carrera SIN protección")
+	fmt.Println("\n -> PASO 1: Condición de carrera SIN protección")
 	fmt.Println("  (El resultado incorrecto demuestra el problema)")
 	sincronizacion.DemostrarCondicionCarrera(10, 100)
 
-	fmt.Println("▶ PASO 2: Sección crítica protegida con sync.Mutex")
+	fmt.Println(" -> PASO 2: Sección crítica protegida con sync.Mutex")
 	sincronizacion.DemostrarMutex(10, 100)
 
-	fmt.Println("▶ PASO 3: Control de acceso con Semáforo (channel buffereado)")
+	fmt.Println("-> PASO 3: Control de acceso con Semáforo (channel buffereado)")
 	sincronizacion.DemostrarSemaforo(3, 8)
 
 	// ═══════════════════════════════════════════════════════
@@ -120,11 +120,11 @@ func main() {
 	// ═══════════════════════════════════════════════════════
 	separador("MÓDULO 5 — Monitoreo de recursos reales del sistema")
 
-	fmt.Println("\n▶ Tomando 5 snapshots de CPU, Memoria y Goroutines...")
+	fmt.Println("\n-> Tomando 5 snapshots de CPU, Memoria y Goroutines...")
 	mon := monitor.NuevoMonitor(500 * time.Millisecond)
 	mon.Monitorear(5)
 
-	fmt.Println("\n▶ Resumen del historial de monitoreo:")
+	fmt.Println("\n-> Resumen del historial de monitoreo:")
 	mon.ResumenHistorial()
 
 	// ═══════════════════════════════════════════════════════
@@ -132,6 +132,6 @@ func main() {
 	// ═══════════════════════════════════════════════════════
 	fmt.Println()
 	fmt.Println("╔══════════════════════════════════════════════════════════════╗")
-	fmt.Println("║                 Ejecución completada exitosamente           ║")
+	fmt.Println("║                 Ejecución completada exitosamente            ║")
 	fmt.Println("╚══════════════════════════════════════════════════════════════╝")
 }

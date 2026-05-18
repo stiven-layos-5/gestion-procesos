@@ -40,7 +40,6 @@ func NuevoWorkerPool(numWorkers int) *WorkerPool {
 func goroutineID() string {
 	var buf [64]byte
 	n := runtime.Stack(buf[:], false)
-	// El stack empieza con "goroutine XX [..."
 	stack := string(buf[:n])
 	start := len("goroutine ")
 	end := start
