@@ -41,10 +41,49 @@ gestion-procesos/
 ## Instalación y Ejecución
 
 ```bash
+
 # Clonar o crear el proyecto
 mkdir gestion-procesos
 cd gestion-procesos
+#
 
 # Ejecutar
-go run main.go O go run .
+go run main.go
+go run .
+go run -race .
+
 ```
+
+## Conceptos claves
+
+### Módulo 1 — Planificación
+
+- **Estado de proceso:** NUEVO → LISTO → EJECUTANDO → (ESPERANDO) → TERMINADO
+- **Round-Robin:** Quantum fijo, equitativo, apropiativo por tiempo
+- **Prioridad:** Menor número = mayor prioridad; no apropiativo en esta impl.
+- **Métricas:** Tiempo de espera = T.Fin - T.Llegada - BurstTime
+
+### Módulo 2 — Procesos reales
+
+- **API del SO:** `exec.Cmd` (fork+exec), `os.FindProcess`, `Process.Kill`
+- **`ps aux`:** Información de USER, PID, STAT, COMMAND
+- **Señal de terminación:** `Kill()` envía SIGKILL al proceso destino
+
+### Módulo 3 — Concurrencia
+
+- **Goroutine:** Hilo ligero administrado por el runtime de Go (M:N threading)
+- **Channel:** Pipe tipado para comunicación entre goroutines (CSP model)
+- **Worker Pool:** Patrón que limita goroutines activas para controlar recursos
+
+### Módulo 4 — Sincronización
+
+- **Race condition:** Dos goroutines acceden al mismo dato sin coordinación
+- **Sección crítica:** El bloque `leer → incrementar → escribir` del contador
+- **Mutex:** `Lock()` garantiza que solo una goroutine esté en la sección crítica
+- **Semáforo:** Channel buffereado de capacidad N, `send` = adquirir, `recv` = liberar
+
+### Módulo 5 — Monitoreo
+
+- **CPU:** Diferencia de ticks idle/total entre dos lecturas de `/proc/stat`
+- **Memoria:** `runtime.MemStats.Alloc` (heap en uso), `Sys` (total del sistema)
+- **Goroutines:** `runtime.NumGoroutine()` — valor real del runtime de Go
